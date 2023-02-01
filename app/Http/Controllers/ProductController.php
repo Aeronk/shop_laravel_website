@@ -2,11 +2,19 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ProductRequest;
 use App\Models\Product;
-use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Storage;
 
 class ProductController extends Controller
 {
+
+    public function __construct()
+    {
+//        $this->middleware('auth');
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -14,7 +22,8 @@ class ProductController extends Controller
      */
     public function index()
     {
-        //
+        $products = Product::latest()->get();
+        return view('admin.products.index',['products'=>$products]);
     }
 
     /**
@@ -24,7 +33,7 @@ class ProductController extends Controller
      */
     public function create()
     {
-        //
+        return view('admin.products.create');
     }
 
     /**
@@ -33,11 +42,21 @@ class ProductController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(ProductRequest $request)
     {
-        //
-    }
+        try {
+            $image_name = $this->uploadImage($request, false);
+             Product::create([
+                'name' => $request->name,
+                'price' => $request->price,
+                'image' => $image_name
+            ]);
 
+            return redirect()->route('products.index');
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Unable to create product.'], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
     /**
      * Display the specified resource.
      *
@@ -57,7 +76,7 @@ class ProductController extends Controller
      */
     public function edit(Product $product)
     {
-        //
+        return view('admin.products.edit',['product'=>$product]);
     }
 
     /**
@@ -67,10 +86,41 @@ class ProductController extends Controller
      * @param  \App\Models\Product  $product
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Product $product)
+    public function update(ProductRequest $request, Product $product)
     {
-        //
+
+        try {
+
+            $image_name = $this->uploadImage($request, true, $product);
+            $product->update([
+                'name' => $request->name,
+                'price' => $request->price,
+                'image' => $image_name
+            ]);
+
+            return redirect()->route('products.index');
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Unable to update product.'], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
     }
+
+
+    private function uploadImage($request, $update = false, $product = null)
+    {
+        if ($update) {
+            Storage::delete('uploads/' . $product->image);
+        }
+
+        if ($request->hasFile('image')) {
+            $image = $request->file('image');
+            $image_name = time() . '.' . $image->getClientOriginalExtension();
+            $image->move(public_path('uploads'), $image_name);
+
+            return $image_name;
+        }
+        return $product->image ?? null;
+    }
+
 
     /**
      * Remove the specified resource from storage.
