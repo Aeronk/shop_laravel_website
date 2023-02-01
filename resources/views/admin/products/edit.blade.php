@@ -11,7 +11,7 @@
                 Product Form
             </p>
             <div class="leading-loose">
-                <form class="p-10 bg-white rounded shadow-xl"  action="{{route('products.update', $product->id)}}">
+                <form class="p-10 bg-white rounded shadow-xl" method="post" enctype="multipart/form-data"  action="{{route('products.update', $product->id)}}">
                     @csrf
                     @method('put')
                     <div class="">

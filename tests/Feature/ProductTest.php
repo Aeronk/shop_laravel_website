@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Models\Product;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Http\UploadedFile;
@@ -17,8 +18,9 @@ class ProductTest extends TestCase
     {
         Storage::fake('uploads');
         $file = UploadedFile::fake()->image('product.jpg');
+        $user = User::factory(User::class)->create();
 
-        $response = $this->post('/products', [
+        $response = $this->actingAs($user)->post('/products', [
             'name' => 'Test Product',
             'price' => 999.99,
             'image' => $file

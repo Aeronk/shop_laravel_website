@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ProductController;
 use Illuminate\Support\Facades\Route;
 
@@ -18,6 +19,12 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/product-detail/{id}', [HomeController::class, 'singleProduct'])->name('product.detail');
+// routes/web.php
+Route::get('/products/{product}/pay', 'ProductController@pay')->name('products.pay');
+Route::post('/products/{product}/charge', 'ProductController@charge')->name('products.charge');
+Route::get('/thank-you', [PaymentController::class, 'thankYou'])->name('thank_you');
+
+
 
 Route::group(['middleware' => ['web', 'auth']], function () {
 

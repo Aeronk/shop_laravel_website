@@ -33,7 +33,7 @@
                         <div class="flex items-center">
                             <div class="flex-shrink-0 w-10 h-10">
                                 <img class="w-full h-full rounded-full"
-                                     src="{{$product->image}}"
+                                     src="{{$product->image_path??""}}"
                                      alt="{{$product->image}}" />
                             </div>
                             <div class="ml-3">
@@ -50,9 +50,14 @@
                     <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
 
                         <a href="{{route('products.edit', $product->id)}}" class="btn">Edit</a>
-                        <a href="{{route('products.destroy', $product->id)}}" class="btn">Delete</a>
+                        <form action="{{ route('products.destroy', $product->id) }}" method="POST" class="inline-flex">
+                            @csrf
+                            @method('DELETE')
+                            <a href="#" onclick=" event.preventDefault();
+                                  if (confirm('Are you sure you want to delete this product?')) {this.parentNode.submit();} " >Delete</a>
+                         </form>
+                        </td>
 
-                    </td>
                 </tr>
                     @empty
                 @endforelse

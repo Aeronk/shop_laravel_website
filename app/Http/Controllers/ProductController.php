@@ -52,7 +52,7 @@ class ProductController extends Controller
                 'image' => $image_name
             ]);
 
-            return redirect()->route('products.index');
+            return redirect()->route('products.index')->with('success', 'Product added successfully');
         } catch (\Exception $e) {
             return response()->json(['error' => 'Unable to create product.'], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
@@ -98,7 +98,7 @@ class ProductController extends Controller
                 'image' => $image_name
             ]);
 
-            return redirect()->route('products.index');
+            return redirect()->route('products.index')->with('success', 'Product updated successfully');
         } catch (\Exception $e) {
             return response()->json(['error' => 'Unable to update product.'], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
@@ -130,6 +130,8 @@ class ProductController extends Controller
      */
     public function destroy(Product $product)
     {
-        //
+
+        $product->delete();
+        return redirect()->route('products.index')->with('success', 'Product deleted successfully');
     }
 }
