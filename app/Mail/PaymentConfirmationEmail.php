@@ -24,8 +24,8 @@ class PaymentConfirmationEmail extends Mailable implements ShouldQueue
     public function build()
     {
         return $this->view('emails.payment_confirmation')
-            ->to($this->order->email, $this->order->name)
-            ->subject('Payment Confirmation for Order #'.$this->order->id)
+            ->to($this->order->email, 'Buyer')
+            ->subject('Payment Confirmation for Order #000'.$this->order->id)
             ->from(Config::get('mail.from.address'), Config::get('mail.from.name'));
     }
 }

@@ -14,7 +14,6 @@ class StripePaymentProcessor extends BasePaymentProcessor
     {
         // Initialize the Stripe API
         Stripe::setApiKey(config('services.stripe.secret'));
-
         // Charge the customer
         $charge = Charge::create([
             'amount' => $data['amount'],
@@ -22,7 +21,6 @@ class StripePaymentProcessor extends BasePaymentProcessor
             'description' => $data['description'],
             'source' => $data['token'],
         ]);
-
         return $charge;
     }
 }

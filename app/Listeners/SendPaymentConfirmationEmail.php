@@ -7,21 +7,17 @@ namespace App\Listeners;
 use App\Events\PaymentConfirmed;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\PaymentConfirmationEmail;
-use App\Events\PaymentSuccessful;
 
 class SendPaymentConfirmationEmail
 {
     /**
      * Handle the event.
      *
-     * @param  PaymentSuccessful  $event
+     * @param  PaymentConfirmed  $event
      * @return void
      */
     public function handle(PaymentConfirmed $event)
     {
-        $payment = $event->payment;
-        $user = $payment->user;
-
-        Mail::to($user->email)->send(new PaymentConfirmationEmail($payment));
+        Mail::to($event->order->email)->send(new PaymentConfirmationEmail($event->order));
     }
 }

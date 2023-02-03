@@ -7,18 +7,19 @@ use Illuminate\Http\Request;
 
 class HomeController extends Controller
 {
-    /**
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
-     */
+
     public function index()
     {
         $products = Product::latest()->get();
-        return view('home',['products'=>$products]);
+        return view('frontend.home',['products'=>$products]);
     }
 
-    public function singleProduct($id){
+    public function singleProduct($id)
+    {
         $product = Product::findorfail($id);
-        return view('product-detail',['product'=>$product]);
+        return view('frontend.product-detail',['product'=>$product]);
 
     }
+
+
 }

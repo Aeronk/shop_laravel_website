@@ -12,7 +12,7 @@ class ProductController extends Controller
 
     public function __construct()
     {
-//        $this->middleware('auth');
+        $this->middleware('auth');
     }
 
     /**
@@ -51,10 +51,12 @@ class ProductController extends Controller
                 'price' => $request->price,
                 'image' => $image_name
             ]);
-
             return redirect()->route('products.index')->with('success', 'Product added successfully');
+
         } catch (\Exception $e) {
-            return response()->json(['error' => 'Unable to create product.'], Response::HTTP_INTERNAL_SERVER_ERROR);
+
+            return redirect()->back()->with('error','Something went wrong');
+
         }
     }
     /**
@@ -88,9 +90,7 @@ class ProductController extends Controller
      */
     public function update(ProductRequest $request, Product $product)
     {
-
         try {
-
             $image_name = $this->uploadImage($request, true, $product);
             $product->update([
                 'name' => $request->name,

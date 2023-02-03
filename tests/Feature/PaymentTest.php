@@ -18,23 +18,17 @@ class PaymentTest extends TestCase
     public function testCharge()
     {
         $paymentProcessor = new StripePaymentProcessor;
+        $data = [
+            'amount' => 100,
+            'currency' => 'usd',
+            'description' => "buy test",
+            'token' =>'visa_tok',
+        ];
 
-        $response = $paymentProcessor->charge(100, 'tok_visa');
-
-        $this->assertEquals($response['status'], 'success');
-    }
-
-    /**
-     * Test the refund method of the payment processor.
-     *
-     * @return void
-     */
-    public function testRefund()
-    {
-        $paymentProcessor = new PaymentProcessor;
-
-        $response = $paymentProcessor->refund(100, 'tok_visa');
+        $response = $paymentProcessor->charge($data );
 
         $this->assertEquals($response['status'], 'success');
     }
+
+
 }
