@@ -2,8 +2,8 @@ Please create a Laravel application to be developed in the following phases
 
 Phase 1 – Catalogue
 Please create the following pages in the application:
-•	home page
-o	grid of products, each product should display:
+--home page
+--grid of products, each product should display:
 	Image
 	Name
 	Price
